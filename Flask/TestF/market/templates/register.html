@@ -10,7 +10,9 @@
         <div class="container">
             <h1>Create an account</h1>
             <br>
-            <form action="POST" class="form-register" style="color: white;">
+            <form method="POST" class="form-register" style="color: white;" novalidate>
+                {{ form.hidden_tag() }}
+
                 {{ form.username.label() }}
                 {{ form.username(class='form-control') }}
         
