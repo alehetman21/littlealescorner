@@ -1,7 +1,7 @@
 from market import app, db
 from flask import render_template, redirect, url_for, flash
 from market.models import Item, User
-from market.forms import RegisterForm
+from market.forms import RegisterForm, LoginForm
 
 @app.route('/')
 @app.route('/home')
@@ -31,3 +31,11 @@ def register():
         for error in form.errors.values():
             flash(f"There was an error: {error}", category='danger')
     return render_template('register.html', form=form)
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('login.html', form=form)
