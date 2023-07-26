@@ -2,7 +2,7 @@ from market import app, db
 from flask import render_template, redirect, url_for, flash
 from market.models import Item, User
 from market.forms import RegisterForm, LoginForm
-from flask_login import login_user
+from flask_login import login_user, logout_user, login_required
 
 @app.route('/')
 @app.route('/home')
@@ -11,6 +11,7 @@ def home():
 
 
 @app.route('/market')
+@login_required
 def market():
     context = {
         'items': Item.query.all()
@@ -27,6 +28,8 @@ def register():
                     plain_pass=form.password.data)
         db.session.add(user)
         db.session.commit()
+        login_user(user)
+        flash('User has been created successfully!', category='success')
         return redirect(url_for('home'))
     if form.errors != {}:
         for error in form.errors.values():
@@ -46,3 +49,10 @@ def login():
         else:
             flash("Credentials don't match", category='danger')
     return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out!', category='info')
+    return redirect(url_for('home'))
